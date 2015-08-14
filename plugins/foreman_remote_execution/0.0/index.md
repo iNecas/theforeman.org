@@ -9,7 +9,7 @@ version: 0.0
 This plugin enables Foreman to run arbitrary commands on hosts using different providers.
 Currently only SSH provider is supported. Communication goes through Smart proxy so Foreman
 does not have to have direct access to the target host. A command can be customized
-similarly to provisioning templates or partition tables, for more details see [Job Tempaltes](plugins/foreman_remote_execution/{{page.version}}/index.html#3.1JobTemplates) section.
+similarly to provisioning templates or partition tables, for more details see [Job Tempaltes](plugins/foreman_remote_execution/{{page.version}}/index.html#2.1JobTemplates) section.
 
 The command can be executed on multiple servers at once while specific parts of it can vary per host - in other words you can use variables in your commands. Variable values can be filled by given host fact, smart class parameter, smart variable or even host parameter. Last but not least, the value can be specified by user when he or she triggers the execution.
 
