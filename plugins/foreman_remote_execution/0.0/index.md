@@ -33,7 +33,7 @@ Few examples of tasks that this plugins helps you to achieve
 
 The whole remote execution system is pluggable, making it easy to add
 more providers of communication later. Therefore it's split into
-several components that must be installed on Foreman  and Foreman Proxy.
+several components that must be installed on Foreman  and Foreman proxy.
 
 <table class="table table-bordered table-condensed">
   <tr>
@@ -99,25 +99,30 @@ user on target host. To customize it you can edit the configuration in
 customization you need to create new ssh key and distribute it to
 target hosts. The key must not use passphrase.
 
-To generate a key, run following command on the host where smart proxy runs
+To generate a key, run following command on the host where Smart proxy runs
 
     mkdir ~foreman-proxy/.ssh
     chown foreman-proxy ~foreman-proxy/.ssh
     sudo -u foreman-proxy ssh-keygen -f ~foreman-proxy/.ssh/id_rsa_foreman_proxy -N ''
 
-Now you have to distribute the generated key to all potential targets, e.g.
-
-    ssh-copy-id -i ~foreman-proxy/.ssh/id_rsa_foreman_proxy.pub root@target.example.com
-
 Don't forget to restart Foreman, Smart proxy and Foreman tasks so
 plugins are loaded
 
     service httpd restart
-    service foreman-proxy restart
     service foreman-tasks restart
+    service foreman-proxy restart
 
-Note: the installation and distribution of ssh-key are planned to be
-improved and simplified in next versions.
+Finally, you have to refresh the Smart proxy features in the Foreman:
+Dynflow and Ssh should appear there as new features of the Smart proxy.
+
+Now you have to distribute the generated key to all potential targets, e.g.
+
+    ssh-copy-id -i ~foreman-proxy/.ssh/id_rsa_foreman_proxy.pub root@target.example.com
+
+Alternatively, the Foreman proxy publishes the public key it over the
+api, so that one can just download it into authorized keys:
+
+    curl https://myproxy.example.com:8443/ssh/pubkey >> ~/.ssh/authorized_keys
 
 # 2. Usage
 
@@ -144,16 +149,17 @@ which stands for variables which you define in second tab called Job.
 
 Before we get to inputs, lets look at other fields in Job tab. First
 one is autocomplete field **Job name**. This is generic name of the
-Job, which might be implemented by more Job Templates, so one template
-e.g. uses `yum` to install packages while second one uses `dnf`. **Job
-name** should be "install package" for both, while **Name** attributes
-would be something like "install package using yum" and "install
-package using dnf". This will become more handy when there are more
-than one **Provider type**. **Provider type** is another attribute
-which you don't have to change unless you install additional
-connection provider plugins. If you're unsure about the difference
-between **Name** and **Job name**, you can keep both the same, later
-you'll be using **Job name** to select which job you want to execute.
+Job, which might be implemented by more Job Templates: for example one
+template can use use `yum` to install packages while second one uses
+`dnf`. **Job name** should be "install package" for both, while
+**Name** attributes would be something like "install package using
+yum" and "install package using dnf". This will become more handy when
+there are more than one **Provider type**. **Provider type** is
+another attribute which you don't have to change unless you install
+additional connection provider plugins. If you're unsure about the
+difference between **Name** and **Job name**, you can keep both the
+same, later you'll be using **Job name** to select which job you want
+to execute.
 
 On the very same tab you can configure inputs. These template inputs
 defines values that can be accessed in the template code by input
