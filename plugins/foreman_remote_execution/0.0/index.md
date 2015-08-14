@@ -12,7 +12,7 @@ Communication goes through Smart proxy so Foreman does not have to
 have direct access to the target host. A command can be customized
 similarly to provisioning templates or partition tables, for more
 details see
-[Job Templates](plugins/foreman_remote_execution/{{page.version}}/index.html#2.1JobTemplates)
+[Job Templates](plugins/foreman_remote_execution/{{page.version}}/index.html#3.1JobTemplates)
 section.
 
 The command can be executed on multiple servers at once while specific
@@ -124,14 +124,14 @@ api, so that one can just download it into authorized keys:
 
     curl https://myproxy.example.com:8443/ssh/pubkey >> ~/.ssh/authorized_keys
 
-# 2. Usage
+# 3. Usage
 
 After installation you can start preparing your commands and run them
 on your hosts. Every command must be defined as a Job Template. Once
 defined it can be executed multiple times. Let's start with the
 definition first.
 
-## 2.1 Job Templates
+## 3.1 Job Templates
 
 If you're familiar with Foreman provisioning templates, you should
 find writing job templates familiar. First navigate to Host -> Job
@@ -220,7 +220,7 @@ Note that until inputs are saved the preview of template won't work.
 To review the template first save it and then get back to the form and
 hit Preview button.
 
-## 2.2 Executing a Job
+## 3.2 Executing a Job
 
 You can execute existing Job if it has at least one Job Template that
 implements it from various places. One way is to go to host detail
@@ -257,7 +257,7 @@ there's just one like in my example, you'll just have to provide
 values for all user inputs. After submiting the form, you're
 redirected to the Job detail.
 
-## 2.3 Job detail
+## 3.3 Job detail
 
 On Job detail page you can see overall progress and result of the job
 execution.
@@ -284,7 +284,7 @@ execution for a particular host. Note that this task is a subtask of a
 whole Job task.
 
 
-## 2.4 Jobs list
+## 3.4 Jobs list
 
 You can find all Jobs when you navigate to Monitor -> Jobs. A table
 lists all jobs from history to future. You can search jobs by **Job
@@ -297,25 +297,54 @@ with "set".
 
 ![Job invocatios list](/plugins/foreman_remote_execution/{{page.version}}/job_invocations.png)
 
-# 3. Advanced topics
+# 4. Advanced topics
 
 In this section we try to explain how do things work behind the scene.
 
-## 3.1 Determining the smart proxy for host
+## 4.1 Determining the smart proxy for host
 
-TODO algorithm
-TODO remote_execution_global_proxy setting
+In order to perform the job on a host, there needs to be a Smart proxy
+available to do the job. Also, not all proxies can be used for all
+hosts in the infrastructure (due to possible network isolation).
 
-## 3.1 SSH authentication and keys
+For now, we search for the proxy among the proxies that are assigned
+to the host: either directly (e.g. puppet master…) or via subnets
+(e.g. dhcp…). The reason for this is to make the initial setup for the
+remote execution plugin as easy as possible.
 
-# 4. Help
+In case of a fresh infrastructure, where no proxies are assigned to
+the hosts whatsoever, one can enable **remote_execution_global_proxy**
+setting. When turned on, the algorithm will fallback to the first
+available Smart proxy with required remote execution feature. This is
+useful for simpler infrastructure, as well as for testing purposes.
+
+In future, it's possible there will be more sophisticated mechanism
+available for determining the Smart proxy to use, especially in the
+multi-providers scenario.
+
+## 4.1 SSH authentication and keys
+
+The Smart proxy needs to be provided with a key to be used against the
+remote hosts (see
+[Installation instructions](plugins/foreman_remote_execution/{{page.version}}/index.html#2.Installation)
+for details). The remote hosts need to be configured to accept the
+private key that the smart proxy is using.
+
+In future versions, there will be possible to provide the hosts public
+keys for verification.
+
+For now, the `root` is used as the user to access the remote hosts. It
+will be possible to change this in later versions. Also, the user to
+actually run the script will be configurable on per-job basis.
+
+# 5. Help
 
 Please follow our [standard procedures and
 contacts]({{site.baseurl}}support.html).
 
-# 5. Getting involved
+# 6. Getting involved
 
-## 5.1 Troubleshooting
+## 6.1 Troubleshooting
 
 If you find a bug, please file it in
 [Redmine](http://projects.theforeman.org/projects/foreman_remote_execution/issues/new).
@@ -324,12 +353,12 @@ See the [troubleshooting section](/manuals/latest/index.html#7.2GettingHelp)
 in the Foreman manual for more info.
 
 
-## 5.2 Contributing
+## 6.2 Contributing
 
 Follow the [same process as Foreman](/contribute.html#SubmitPatches)
 for contributing.
 
-# 6. Links
+# 7. Links
 
 * foreman_remote_execution plugin [https://github.com/theforeman/foreman_remote_execution](https://github.com/theforeman/foreman_remote_execution)
 * foreman-tasks plugin [https://github.com/theforeman/foreman-tasks](https://github.com/theforeman/foreman-tasks)
