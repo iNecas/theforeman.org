@@ -115,14 +115,20 @@ plugins are loaded
 Finally, you have to refresh the Smart proxy features in the Foreman:
 Dynflow and Ssh should appear there as new features of the Smart proxy.
 
+## 2.1 Remote Hosts Configuration
+
 Now you have to distribute the generated key to all potential targets, e.g.
 
     ssh-copy-id -i ~foreman-proxy/.ssh/id_rsa_foreman_proxy.pub root@target.example.com
 
 Alternatively, the Foreman proxy publishes the public key it over the
-api, so that one can just download it into authorized keys:
+API, so that one can just download it into authorized keys:
 
     curl https://myproxy.example.com:8443/ssh/pubkey >> ~/.ssh/authorized_keys
+
+For the execution to work, the client needs to have **openssh-server** installed and configured.
+Also, **openssh-clients** need to be present, in order to **scp** to work (which we use for getting
+the scripts to the remote host)
 
 # 3. Usage
 
