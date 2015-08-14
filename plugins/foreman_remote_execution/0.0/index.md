@@ -12,7 +12,7 @@ Communication goes through Smart proxy so Foreman does not have to
 have direct access to the target host. A command can be customized
 similarly to provisioning templates or partition tables, for more
 details see
-[Job Tempaltes](plugins/foreman_remote_execution/{{page.version}}/index.html#2.1JobTemplates)
+[Job Templates](plugins/foreman_remote_execution/{{page.version}}/index.html#2.1JobTemplates)
 section.
 
 The command can be executed on multiple servers at once while specific
@@ -31,9 +31,9 @@ Few examples of tasks that this plugins helps you to achieve
 
 ## 1.1 Components
 
-The whole remote execution system is pluggable making it easy to add
+The whole remote execution system is pluggable, making it easy to add
 more providers of communication later. Therefore it's split into
-several components that must be installed.
+several components that must be installed on Foreman  and Foreman Proxy.
 
 <table class="table table-bordered table-condensed">
   <tr>
@@ -54,7 +54,7 @@ several components that must be installed.
   </tr>
   <tr>
     <td>smart_proxy_dynflow</td>
-    <td>Smart proxy plugin, keeps status of executed commands via this proxy</td>
+    <td>Smart proxy plugin, runs the jobs asynchronously and keeps status of commands executed via this proxy</td>
   </tr>
 </table>
 
